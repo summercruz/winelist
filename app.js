@@ -61,12 +61,12 @@ function add_wine() {
 db.collection("wines").where("Category", "==", "Red").onSnapshot(function(querySnapshot) {
         var dataSet = [];
         querySnapshot.forEach(function(doc) {
-            dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`, `${doc.data().Origin}`]);
+             dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`, `${doc.data().Origin}`, `${doc.data().StoreBought}`]);
         });
         console.log(dataSet);
 		
 		$(document).ready(function() {
-		    $('#reds').DataTable( {
+		    var table = $('#reds').DataTable( {
 				searching: false,
 				paging: false,
 				info: false,
@@ -76,34 +76,59 @@ db.collection("wines").where("Category", "==", "Red").onSnapshot(function(queryS
 		            { title: "Name" },
 		            { title: "Variety" },
 		            { title: "Vintage" },
-					{ title: "Origin" }
-		        ],
-				responsive: {
-		                    details: {
-		                        display: $.fn.dataTable.Responsive.display.modal( {
-		                            header: function ( row ) {
-		                                var data = row.data();
-		                                return 'Details for '+data[0]+' '+data[1];
-		                            }
-		                        } ),
-		                        renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
-		                            tableClass: 'table'
-		                        } )
-		                    }
-		                }
+					{ title: "Origin" },
+					{visible: false}
+		        ]
 		    } );
+			
+			$('#reds tbody').on('click', 'tr', function () {
+			        var data = table.row( this ).data();
+					var modalcontent = document.getElementById('modalcontent');
+					var modalheading = document.getElementById('modalheading');
+					modalheading.innerHTML = "Details for " + data[0] + " " + data[1];
+					modalcontent.innerHTML = `
+						<div class="container-fluid">
+							<div class="row">
+							      <div class="col-md-4"><b>Producer:</b></div>
+							      <div class="col-md-4">${data[0]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Name:</b></div>
+							      <div class="col-md-4">${data[1]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Variety:</b></div>
+							      <div class="col-md-4">${data[2]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Vintage:</b></div>
+							      <div class="col-md-4">${data[3]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Origin:</b></div>
+							      <div class="col-md-4">${data[4]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Purchased at:</b></div>
+							      <div class="col-md-4">${data[5]}</div>
+							</div>
+						<div>`;
+						
+					$("#myModal").modal();
+			    } );
+			
 		} );
 });
 
 db.collection("wines").where("Category", "==", "White").onSnapshot(function(querySnapshot) {
         var dataSet = [];
         querySnapshot.forEach(function(doc) {
-           dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`, `${doc.data().Origin}`]);
+            dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`, `${doc.data().Origin}`, `${doc.data().StoreBought}`]);
         });
         console.log(dataSet);
 		
 		$(document).ready(function() {
-		    $('#whites').DataTable( {
+		    var table = $('#whites').DataTable( {
 				searching: false,
 				paging: false,
 				info: false,
@@ -113,21 +138,58 @@ db.collection("wines").where("Category", "==", "White").onSnapshot(function(quer
 		            { title: "Name" },
 		            { title: "Variety" },
 		            { title: "Vintage" },
-					{ title: "Origin" }
+		            { title: "Origin" },
+		            {visible: false}
 		        ]
 		    } );
+			
+			$('#whites tbody').on('click', 'tr', function () {
+			        var data = table.row( this ).data();
+					var modalcontent = document.getElementById('modalcontent');
+					var modalheading = document.getElementById('modalheading');
+					modalheading.innerHTML = "Details for " + data[0] + " " + data[1];
+					modalcontent.innerHTML = `
+						<div class="container-fluid">
+							<div class="row">
+							      <div class="col-md-4"><b>Producer:</b></div>
+							      <div class="col-md-4">${data[0]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Name:</b></div>
+							      <div class="col-md-4">${data[1]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Variety:</b></div>
+							      <div class="col-md-4">${data[2]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Vintage:</b></div>
+							      <div class="col-md-4">${data[3]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Origin:</b></div>
+							      <div class="col-md-4">${data[4]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Purchased at:</b></div>
+							      <div class="col-md-4">${data[5]}</div>
+							</div>
+						<div>`
+					$("#myModal").modal();
+			    } );
+			
 		} );
 });
 
 db.collection("wines").where("Category", "==", "Sparkling").onSnapshot(function(querySnapshot) {
         var dataSet = [];
         querySnapshot.forEach(function(doc) {
-            dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`]);
+            dataSet.push([`${doc.data().Producer}`, `${doc.data().Name}`, `${doc.data().Variety}`, `${doc.data().Vintage}`, `${doc.data().Origin}`, `${doc.data().StoreBought}`]);
         });
         console.log(dataSet);
 		
 		$(document).ready(function() {
-		    $('#sparkling').DataTable( {
+		    var table = $('#sparkling').DataTable( {
 				searching: false,
 				paging: false,
 				info: false,
@@ -135,10 +197,47 @@ db.collection("wines").where("Category", "==", "Sparkling").onSnapshot(function(
 		        columns: [
 		            { title: "Producer" },
 		            { title: "Name" },
-		            { title: "Variety" },
-		            { title: "Vintage" }
+		            { visible: false},
+		            { visible: false },
+		            { title: "Origin" },
+		            {visible: false}
 		        ]
 		    } );
+			
+			$('#sparkling tbody').on('click', 'tr', function () {
+			        var data = table.row( this ).data();
+					var modalcontent = document.getElementById('modalcontent');
+					var modalheading = document.getElementById('modalheading');
+					modalheading.innerHTML = "Details for " + data[0] + " " + data[1];
+					modalcontent.innerHTML = `
+						<div class="container-fluid">
+							<div class="row">
+							      <div class="col-md-4"><b>Producer:</b></div>
+							      <div class="col-md-4">${data[0]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Name:</b></div>
+							      <div class="col-md-4">${data[1]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Variety:</b></div>
+							      <div class="col-md-4">${data[2]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Vintage:</b></div>
+							      <div class="col-md-4">${data[3]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Origin:</b></div>
+							      <div class="col-md-4">${data[4]}</div>
+							</div>
+							<div class="row">
+							      <div class="col-md-4"><b>Purchased at:</b></div>
+							      <div class="col-md-4">${data[5]}</div>
+							</div>
+						<div>`
+					$("#myModal").modal();
+			    } );
 		} );
 });
 
