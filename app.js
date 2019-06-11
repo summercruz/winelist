@@ -26,6 +26,9 @@ function add_wine() {
 	var datebought = document.getElementById('date-bought').value;
 	var inventory = document.getElementById('inventory').value;
 	var datedrink = document.getElementById('date-drink').value;
+	var drinkby = document.getElementById('drinkby').value;
+	var locx = document.getElementById('locx').value;
+	var locy = document.getElementById('locy').value;
 	
 	db.collection("wines").add({
 	    Producer: producer,
@@ -37,7 +40,10 @@ function add_wine() {
 		StoreBought: placebought,
 		DateAcquired: datebought,
 		Inventory: inventory,
-		DrinkDate: datedrink	
+		DrinkDate: datedrink,
+		DrinkBy: drinkby,
+		locx: locx,
+		locy: locy	
 	})
 	.then(function(docRef) {
 	    console.log("Document written with ID: ", docRef.id);
@@ -52,9 +58,77 @@ function add_wine() {
 		document.getElementById('date-bought').value = '';
 		document.getElementById('inventory').value = '';
 		document.getElementById('date-drink').value = '';
+		document.getElementById('drinkby').value = '';
+		document.getElementById('locx').value = '';
+		document.getElementById('locy').value = '';
 	})
 	.catch(function(error) {
 	    console.error("Error adding document: ", error);
+	});
+}
+
+function tdclick() {
+	$('td').click(function(){
+	  var col = $(this).parent().children().index($(this));
+	  var row = $(this).parent().parent().children().index($(this).parent());
+	  
+	  console.log(col, row);
+	  var dataSet = [];
+	  
+	  
+	  db.collection("wines").where("locx", "==", String(col)).where("locy", "==", String(row))
+	  	.get()
+	  	.then(function(querySnapshot) {
+	          
+	        querySnapshot.forEach(function(doc) {
+				   dataSet = doc.data();
+	        });
+	        console.log(dataSet);
+			
+			
+			var modalcontent = document.getElementById('modalcontent');
+			var modalheading = document.getElementById('modalheading');
+			
+			if (dataSet.length == 0){
+				modalheading.innerHTML = "Empty Slot";
+				modalcontent.innerHTML = "Wine not available";
+			}
+			else {  
+	  		
+	  		modalheading.innerHTML = "Details for " + dataSet.Producer + " " + dataSet.Name;
+	  		modalcontent.innerHTML = `
+	  			<div class="container-fluid">
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Producer:</b></div>
+	  				      <div class="col-md-4">${dataSet.Producer}</div>
+	  				</div>
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Name:</b></div>
+	  				      <div class="col-md-4">${dataSet.Name}</div>
+	  				</div>
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Variety:</b></div>
+	  				      <div class="col-md-4">${dataSet.Variety}</div>
+	  				</div>
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Vintage:</b></div>
+	  				      <div class="col-md-4">${dataSet.Vintage}</div>
+	  				</div>
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Origin:</b></div>
+	  				      <div class="col-md-4">${dataSet.Origin}</div>
+	  				</div>
+	  				<div class="row">
+	  				      <div class="col-md-4"><b>Purchased at:</b></div>
+	  				      <div class="col-md-4">${dataSet.StoreBought}</div>
+	  				</div>
+	  			<div>`;
+	  		}
+			$("#myModal").modal();
+		})
+		.catch(function(error) {
+		        console.log("Error getting documents: ", error);
+		});
 	});
 }
 
