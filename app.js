@@ -22,6 +22,7 @@ function add_wine() {
 	var vintage = document.getElementById('vintage').value;
 	var origin = document.getElementById('origin').value;
 	var price = document.getElementById('price').value;
+	var category = document.getElementById('category').value;
 	var placebought = document.getElementById('place-bought').value;
 	var datebought = document.getElementById('date-bought').value;
 	var inventory = document.getElementById('inventory').value;
@@ -37,6 +38,7 @@ function add_wine() {
 		Vintage: vintage,
 		Origin: origin,
 		Price: price,
+		Category: category,
 		StoreBought: placebought,
 		DateAcquired: datebought,
 		Inventory: inventory,
@@ -54,6 +56,7 @@ function add_wine() {
 		document.getElementById('vintage').value = '';
 		document.getElementById('origin').value = '';
 		document.getElementById('price').value = '';
+		document.getElementById('category').value = '';
 		document.getElementById('place-bought').value = '';
 		document.getElementById('date-bought').value = '';
 		document.getElementById('inventory').value = '';
